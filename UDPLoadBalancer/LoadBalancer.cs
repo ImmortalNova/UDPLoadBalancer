@@ -21,6 +21,7 @@ namespace UDPLoadBalancer
         private int _port;
         private IPEndPoint _endpoint;
 
+        public int SendCounter { get; set; } = 0;
         public long ResponseTime { get; private set; } = -1;
         public DateTime LastChecked { get; private set; }
         public State Status { get; private set; }
@@ -125,20 +126,23 @@ namespace UDPLoadBalancer
 
         private void StatusMonitorThreadWork()
         {
-            while (_isRunning)
+            try
             {
-                foreach (LoadBalancerServer s in Servers)
+                while (_isRunning)
                 {
-                    s.CheckStatus();
-                }
+                    foreach (LoadBalancerServer s in Servers)
+                    {
+                        s.CheckStatus();
+                    }
 
-                Thread.Sleep(_statusMonitorThreadInterval);
+                    Thread.Sleep(_statusMonitorThreadInterval);
+                }
             }
+            catch(ThreadInterruptedException) { }
         }
 
         private void ListenThreadWork()
         {
-            IPEndPoint remoteEp = new IPEndPoint(IPAddress.Any, 0);
             using (UdpClient listener = new UdpClient(ListenEndpoint))
             {
                 using (UdpClient relayer = new UdpClient())
@@ -146,6 +150,8 @@ namespace UDPLoadBalancer
                     try
                     {
                         Console.WriteLine("Load Balancer listening on {0}", ListenEndpoint.ToString());
+
+                        IPEndPoint remoteEp = new IPEndPoint(IPAddress.Any, 0);
                         LoadBalancerServer targetServer = null;
 
                         while (_isRunning)
@@ -157,6 +163,7 @@ namespace UDPLoadBalancer
                             {
                                 Console.WriteLine("Relaying UDP Datagram from {0} to {1}:\r\n {2}\r\n=========", remoteEp.ToString(), targetServer.Endpoint.ToString(), Encoding.ASCII.GetString(bytes, 0, bytes.Length));
                                 relayer.Send(bytes, bytes.Length, targetServer.Endpoint);
+                                ++targetServer.SendCounter;
                             }
                             else
                             {
@@ -164,6 +171,7 @@ namespace UDPLoadBalancer
                             }
                         }
                     }
+                    catch(ThreadInterruptedException) { }
                     catch (Exception e)
                     {
                         Console.WriteLine("Exception in Listen Thread.\r\n{0}", e.ToString());

@@ -24,7 +24,7 @@ namespace UDPLoadBalancer
             {
                 string line = Console.ReadLine();
 
-                if (line == "quit")
+                if (line == "quit" || line == "q")
                     break;
 
                 if(line == "stats")
@@ -35,12 +35,18 @@ namespace UDPLoadBalancer
                         Console.WriteLine("Server {0}", server.Hostname);
                         Console.WriteLine("  Status: {0}", server.Status);
                         Console.WriteLine("  Response Time: {0}", server.ResponseTime);
+                        Console.WriteLine("  Messages Sent: {0}", server.SendCounter);
                         Console.WriteLine("==========================================");
                     }
                 }
             }
 
+            Console.WriteLine("Load Balancer stopping...");
+
             loadBalancer.Stop();
+
+            Console.WriteLine("Load Balancer stopped. Press a key to exit.");
+            Console.ReadKey();
         }
     }
 }

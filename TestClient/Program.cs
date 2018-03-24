@@ -12,27 +12,40 @@ namespace TestClient
     {
         static void Main(string[] args)
         {
-            bool done = false;
-
             UdpClient client = new UdpClient();
-            IPEndPoint localEp = new IPEndPoint(IPAddress.Loopback, 514);
+
+            Console.Write("Please enter the Remote Hostname/IP Address [localhost]: ");
+            String hostname = Console.ReadLine();
+            if (String.IsNullOrWhiteSpace(hostname))
+            {
+                hostname = "localhost";
+            }
+            IPHostEntry ipHost = Dns.GetHostEntry(hostname);
+            IPAddress ipAddress = ipHost.AddressList.Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).First();
+
+            Console.Write("Please enter the Remote Port [514]: ");
+            String strPort = Console.ReadLine();
+            int port = int.TryParse(strPort, out port) ? port : 514;
+
+            IPEndPoint remoteEp = new IPEndPoint(ipAddress, port);
+
+            Console.WriteLine("Remote Endpoint set to {0}", remoteEp);
 
             try
             {
-                while (!done)
+                while (true)
                 {
                     string line = Console.ReadLine();
 
-                    if (line == "exit" || line == "q")
+                    if (line == "quit" || line == "q")
                     {
-                        done = true;
                         break;
                     }
 
                     byte[] dgram = Encoding.ASCII.GetBytes(line);
 
-                    Console.WriteLine("Sending UDP Datagram to {0}", localEp.ToString());
-                    client.Send(dgram, dgram.Length, localEp);
+                    Console.WriteLine("Sending UDP Datagram to {0}", remoteEp.ToString());
+                    client.Send(dgram, dgram.Length, remoteEp);
                 }
 
             }
