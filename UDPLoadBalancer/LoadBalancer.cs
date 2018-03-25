@@ -80,6 +80,7 @@ namespace UDPLoadBalancer
         }
     }
 
+    // TODO: Add Configuration File logic
     class LoadBalancer
     {
         public readonly List<LoadBalancerServer> Servers = new List<LoadBalancerServer>();
@@ -101,11 +102,15 @@ namespace UDPLoadBalancer
 
         private LoadBalancer()
         {
-            _statusMonitor = new Thread(new ThreadStart(StatusMonitorThreadWork));
-            _statusMonitor.IsBackground = true;
+            _statusMonitor = new Thread(new ThreadStart(StatusMonitorThreadWork))
+            {
+                IsBackground = true
+            };
 
-            _listenThread = new Thread(new ThreadStart(ListenThreadWork));
-            _listenThread.IsBackground = true;
+            _listenThread = new Thread(new ThreadStart(ListenThreadWork))
+            {
+                IsBackground = true
+            };
         }
 
         public void Start()
@@ -175,11 +180,6 @@ namespace UDPLoadBalancer
                     catch (Exception e)
                     {
                         Console.WriteLine("Exception in Listen Thread.\r\n{0}", e.ToString());
-                    }
-                    finally
-                    {
-                        listener.Close();
-                        relayer.Close();
                     }
                 }
             }
