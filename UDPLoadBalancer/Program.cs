@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+using UDPLoadBalancer.Configuration;
 
 namespace UDPLoadBalancer
 {
@@ -12,13 +10,28 @@ namespace UDPLoadBalancer
     {
         static void Main(string[] args)
         {
-            LoadBalancer loadBalancer = new LoadBalancer(IPAddress.Any, 514);
-            loadBalancer.Servers.Add(new LoadBalancerServer("localhost", 51411));
-            loadBalancer.Servers.Add(new LoadBalancerServer("localhost", 51412));
-            loadBalancer.Servers.Add(new LoadBalancerServer("deadserver", 51413));
-            loadBalancer.Servers.Add(new LoadBalancerServer("localhost", 51414));
-            loadBalancer.Servers.Add(new LoadBalancerServer("localhost", 51415));
-            loadBalancer.Start();
+            LoadBalancerSection config = ConfigurationManager.GetSection("loadBalancers") as LoadBalancerSection;
+            List<LoadBalancer> loadBalancers = new List<LoadBalancer>();
+            
+            Console.WriteLine("Configuration Loaded. {0} Load Balancers loaded.", config.LoadBalancers.Count);
+            foreach (LoadBalancerElement el in config.LoadBalancers)
+            {
+                Console.WriteLine("  Listen Address: {0}", el.ListenAddress);
+                Console.WriteLine("  Listen Port: {0}", el.ListenPort);
+
+                LoadBalancer lb = new LoadBalancer(el.ListenAddress, el.ListenPort);
+
+                foreach(LoadBalancerNodeElement node in el.Nodes)
+                {
+                    Console.WriteLine("     Node Address: {0}", node.Address);
+                    Console.WriteLine("     Node Port: {0}", node.Port);
+                    Console.WriteLine("==============================");
+
+                    lb.Servers.Add(new LoadBalancer.Node(node.Address, node.Port));
+                }
+
+                lb.Start();
+            }
 
             while(true)
             {
@@ -30,22 +43,27 @@ namespace UDPLoadBalancer
                 if(line == "stats")
                 {
                     Console.WriteLine("Fetching Load Balancer Statistics");
-                    foreach (var server in loadBalancer.Servers)
+                    foreach (var lb in loadBalancers)
                     {
-                        Console.WriteLine("Server {0}", server.Hostname);
-                        Console.WriteLine("  Status: {0}", server.Status);
-                        Console.WriteLine("  Response Time: {0}", server.ResponseTime);
-                        Console.WriteLine("  Messages Sent: {0}", server.SendCounter);
-                        Console.WriteLine("==========================================");
+                        foreach (var server in lb.Servers)
+                        {
+                            Console.WriteLine("Server {0}", server.Hostname);
+                            Console.WriteLine("  Status: {0}", server.Status);
+                            Console.WriteLine("  Response Time: {0}", server.ResponseTime);
+                            Console.WriteLine("  Messages Sent: {0}", server.SendCounter);
+                            Console.WriteLine("==========================================");
+                        }
                     }
                 }
             }
 
-            Console.WriteLine("Load Balancer stopping...");
+            foreach(var lb in loadBalancers)
+            {
+                Console.WriteLine("Load Balancer {0} stopping...", lb.ListenEndpoint.ToString());
+                lb.Stop();
+            }
 
-            loadBalancer.Stop();
-
-            Console.WriteLine("Load Balancer stopped. Press a key to exit.");
+            Console.WriteLine("Load Balancers stopped. Press a key to exit.");
             Console.ReadKey();
         }
     }
