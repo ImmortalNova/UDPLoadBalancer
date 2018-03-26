@@ -13,8 +13,8 @@ namespace UDPLoadBalancer
         static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                   .WriteTo.Console()
+                .MinimumLevel.Verbose()
+                   .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose)
                    .WriteTo.EventLog("UDPLoadBalancer", restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
                    .CreateLogger();
 
@@ -33,12 +33,11 @@ namespace UDPLoadBalancer
 
                     if (line == "stats")
                     {
-                        Console.WriteLine("Fetching Load Balancer Statistics");
                         foreach (var lb in LoadBalancerManager.Instance.LoadBalancers)
                         {
                             foreach (var server in lb.Servers)
                             {
-                                Log.Debug("Server {NodeHostname}\r\n  Status: {NodeStatus}\r\n  Response Time: {NodeResponseTime}\r\n  Messages Sent: {0}", server.Hostname, server.Status, server.ResponseTime, server.SendCounter);
+                                Log.Information("Server {NodeHostname}\r\n  Status: {NodeStatus}\r\n  Response Time: {NodeResponseTime}\r\n  Messages Sent: {0}", server.Hostname, server.Status, server.ResponseTime, server.SendCounter);
                             }
                         }
                     }
@@ -46,7 +45,7 @@ namespace UDPLoadBalancer
 
                 svc.StopWorkers();
 
-                Log.Debug("Load Balancers stopped. Press a key to exit.");
+                Log.Verbose("Load Balancers stopped. Press a key to exit.");
                 Console.ReadKey();
             }
             else

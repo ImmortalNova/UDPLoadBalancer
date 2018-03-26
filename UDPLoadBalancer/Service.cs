@@ -36,13 +36,13 @@ namespace UDPLoadBalancer
 
             foreach (LoadBalancerElement el in config.LoadBalancers)
             {
-                Log.Debug("Creating Load Balancer listening on {ListenAddress}:{ListenPort}", el.ListenAddress, el.ListenPort);
+                Log.Verbose("Creating Load Balancer listening on {ListenAddress}:{ListenPort}", el.ListenAddress, el.ListenPort);
 
                 LoadBalancer lb = new LoadBalancer(el.ListenAddress, el.ListenPort);
 
                 foreach (LoadBalancerNodeElement node in el.Nodes)
                 {
-                    Log.Debug("Adding Node to {ListenEndpoint} with Address {NodeAddress} and Port {NodePort}", lb.ListenEndpoint, node.Address, node.Port);
+                    Log.Verbose("Adding Node to {ListenEndpoint} with Address {NodeAddress} and Port {NodePort}", lb.ListenEndpoint, node.Address, node.Port);
 
                     lb.Servers.Add(new LoadBalancer.Node(node.Address, node.Port));
                 }
@@ -50,7 +50,7 @@ namespace UDPLoadBalancer
                 LoadBalancerManager.Instance.LoadBalancers.Add(lb);
             }
 
-            Log.Debug("Starting {LoadBalancerCount} Load Balancers", LoadBalancerManager.Instance.LoadBalancers.Count);
+            Log.Verbose("Starting {LoadBalancerCount} Load Balancers", LoadBalancerManager.Instance.LoadBalancers.Count);
             foreach (LoadBalancer lb in LoadBalancerManager.Instance.LoadBalancers)
             {
                 lb.Start();
@@ -59,7 +59,7 @@ namespace UDPLoadBalancer
 
         internal void StopWorkers()
         {
-            Log.Debug("Stopping {LoadBalancerCount} Load Balancers", LoadBalancerManager.Instance.LoadBalancers.Count);
+            Log.Verbose("Stopping {LoadBalancerCount} Load Balancers", LoadBalancerManager.Instance.LoadBalancers.Count);
             foreach (LoadBalancer lb in LoadBalancerManager.Instance.LoadBalancers)
             {
                 lb.Stop();

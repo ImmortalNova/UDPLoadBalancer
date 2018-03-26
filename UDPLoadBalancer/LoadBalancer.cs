@@ -156,7 +156,8 @@ namespace UDPLoadBalancer
                 {
                     try
                     {
-                        Log.Debug("Load Balancer listening on {ListenEndpoint}", ListenEndpoint.ToString());
+                        Log.Verbose
+                            ("Load Balancer listening on {ListenEndpoint}", ListenEndpoint.ToString());
 
                         IPEndPoint remoteEp = new IPEndPoint(IPAddress.Any, 0);
                         Node targetServer = null;
