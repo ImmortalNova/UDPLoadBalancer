@@ -37,7 +37,7 @@ namespace UDPLoadBalancer
                         {
                             foreach (var server in lb.Servers)
                             {
-                                Log.Information("Server {NodeHostname}\r\n  Status: {NodeStatus}\r\n  Response Time: {NodeResponseTime}\r\n  Messages Sent: {0}", server.Hostname, server.Status, server.ResponseTime, server.SendCounter);
+                                Log.Information("Server {NodeHostname}:{NodePort}\r\n  Status: {NodeStatus}\r\n  Response Time: {NodeResponseTime}\r\n  Messages Sent: {0}", server.Hostname, server.Port, server.Status, server.ResponseTime, server.SendCounter);
                             }
                         }
                     }
