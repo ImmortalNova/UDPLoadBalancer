@@ -6,7 +6,28 @@
         xmlns:local="clr-namespace:Configurator"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Click="FileNewMenuItem_Click" />
+                <MenuItem Header="_Open..." Click="FileOpenMenuItem_Click" />
+                <MenuItem Header="_Save" Click="FileSaveMenuItem_Click" IsEnabled="{Binding HasConfigOpen}" />
+                <MenuItem Header="_Save As..." Click="FileSaveAsMenuItem_Click" IsEnabled="{Binding HasConfigOpen}" />
+                <Separator />
+                <MenuItem Header="_Exit" Click="FileExitMenuItem_Click" />
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Left" Margin="10" Width="150px">
+            <ListBox Name="loadBalancersListBox" ItemsSource="{Binding Config.LoadBalancers}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListViewItem Content="{Binding Path=ListenAddress}"></ListViewItem>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid Margin="10">
+            
+        </Grid>
+    </DockPanel>
 </Window>
