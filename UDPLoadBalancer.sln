@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UDPLoadBalancer", "UDPLoadB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{C69E7E9D-28E7-4733-91D1-55A252BF4580}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator", "Configurator\Configurator.csproj", "{9015E658-6EF7-4475-92C1-73165A213A71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C69E7E9D-28E7-4733-91D1-55A252BF4580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C69E7E9D-28E7-4733-91D1-55A252BF4580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C69E7E9D-28E7-4733-91D1-55A252BF4580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9015E658-6EF7-4475-92C1-73165A213A71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9015E658-6EF7-4475-92C1-73165A213A71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9015E658-6EF7-4475-92C1-73165A213A71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9015E658-6EF7-4475-92C1-73165A213A71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

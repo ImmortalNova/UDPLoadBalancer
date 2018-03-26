@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,7 +10,6 @@ using System.Threading;
 
 namespace UDPLoadBalancer
 {
-    // TODO: Add Configuration File logic
     internal class LoadBalancer
     {
         internal class Node
@@ -156,7 +156,7 @@ namespace UDPLoadBalancer
                 {
                     try
                     {
-                        Console.WriteLine("Load Balancer listening on {0}", ListenEndpoint.ToString());
+                        Log.Debug("Load Balancer listening on {ListenEndpoint}", ListenEndpoint.ToString());
 
                         IPEndPoint remoteEp = new IPEndPoint(IPAddress.Any, 0);
                         Node targetServer = null;
@@ -168,20 +168,20 @@ namespace UDPLoadBalancer
                             targetServer = Server;
                             if (targetServer != null && targetServer.Endpoint != null)
                             {
-                                Console.WriteLine("Relaying UDP Datagram from {0} to {1}:\r\n {2}\r\n=========", remoteEp.ToString(), targetServer.Endpoint.ToString(), Encoding.ASCII.GetString(bytes, 0, bytes.Length));
+                                Log.Debug("Relaying UDP Datagram from {SourceEndpoint} to {TargetEndpoint} => {Data}", remoteEp.ToString(), targetServer.Endpoint.ToString(), Encoding.ASCII.GetString(bytes, 0, bytes.Length));
                                 relayer.Send(bytes, bytes.Length, targetServer.Endpoint);
                                 ++targetServer.SendCounter;
                             }
                             else
                             {
-                                Console.WriteLine("No servers are available for relaying.");
+                                Log.Debug("No servers are available for relaying!");
                             }
                         }
                     }
                     catch(ThreadInterruptedException) { }
                     catch (Exception e)
                     {
-                        Console.WriteLine("Exception in Listen Thread.\r\n{0}", e.ToString());
+                        Log.Warning("Exception in Listen Thread. {Exception}", e.ToString());
                     }
                 }
             }
@@ -198,7 +198,8 @@ namespace UDPLoadBalancer
         private Random _random = new Random();
         private int _rrLastIndex = 0;
 
-        // TODO: Implement different Load Balancer selection algorithms (round robin, random etc)
+        // TODO: Implement different Node selection algorithms (round robin, random etc)
+        // TODO: Node sorting by Priority
         public Node Server
         {
             get
