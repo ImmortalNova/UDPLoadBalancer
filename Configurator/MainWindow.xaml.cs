@@ -28,7 +28,7 @@ namespace Configurator
             }
         }
 
-        private bool _hasConfigOpen;
+        private bool _hasConfigOpen = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -55,7 +55,7 @@ namespace Configurator
 
         private void MainWindow_ConfigLoaded(object sender, EventArgs e)
         {
-            
+            loadBalancersListBox.ItemsSource = Config.LoadBalancers;
         }
 
         private void OnPropertyChanged(String name)
@@ -119,6 +119,11 @@ namespace Configurator
         private void FileExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void loadBalancersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            loadBalancerView.DataContext = e.AddedItems[0];
         }
     }
 }

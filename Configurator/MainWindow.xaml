@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Configurator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="UDPLoadBalancer Configurator" Height="450" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -18,16 +18,45 @@
             </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Left" Margin="10" Width="150px">
-            <ListBox Name="loadBalancersListBox" ItemsSource="{Binding Config.LoadBalancers}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="25" />
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="0" Name="loadBalancersListBox" ItemsSource="{Binding Path=Config.LoadBalancers}" SelectionChanged="loadBalancersListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <ListViewItem Content="{Binding Path=ListenAddress}"></ListViewItem>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ListenAddress}" />
+                            <TextBlock Text=":" />
+                            <TextBlock Text="{Binding ListenPort}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <StackPanel Height="32" Margin="5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1">
+                <Button Width="32" Margin="5">+</Button>
+                <Button Width="32" Margin="5">-</Button>
+            </StackPanel>
         </Grid>
-        <Grid Margin="10">
-            
+        <Grid Margin="10" Name="loadBalancerView">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                <TextBlock Text="Listens On: " Padding="5" />
+                <TextBox Width="150" Padding="5" Text="{Binding ListenAddress}" />
+                <TextBlock Text=":" Padding="5" />
+                <TextBox Width="80" Padding="5" Text="{Binding ListenPort}" />
+            </StackPanel>
+            <ListView Grid.Row="1" ItemsSource="{Binding Nodes}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="140" Header="Target Address" DisplayMemberBinding="{Binding Address}"  />
+                        <GridViewColumn Width="140" Header="Target Port" DisplayMemberBinding="{Binding Port}"  />
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Grid>
     </DockPanel>
 </Window>
