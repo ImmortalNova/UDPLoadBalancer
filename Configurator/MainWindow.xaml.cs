@@ -55,7 +55,7 @@ namespace Configurator
 
         private void MainWindow_ConfigLoaded(object sender, EventArgs e)
         {
-            loadBalancersListBox.ItemsSource = Config.LoadBalancers;
+            //loadBalancersListBox.ItemsSource = Config.LoadBalancers;
         }
 
         private void OnPropertyChanged(String name)
@@ -124,6 +124,30 @@ namespace Configurator
         private void loadBalancersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             loadBalancerView.DataContext = e.AddedItems[0];
+        }
+
+        private void NewLoadBalancer_Click(object sender, RoutedEventArgs e)
+        {
+            LoadBalancerElement newElement = new LoadBalancerElement();
+            newElement.ListenAddress = "localhost";
+            newElement.ListenPort = 1337;
+            Config.LoadBalancers.Add(newElement);
+            OnPropertyChanged("Config");
+        }
+
+        private void DeleteLoadBalancer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NewLoadBalancerNode_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteLoadBalancerNode_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

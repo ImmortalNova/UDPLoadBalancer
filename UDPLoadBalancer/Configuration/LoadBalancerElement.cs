@@ -27,7 +27,7 @@ namespace UDPLoadBalancer.Configuration
 
         internal string Key
         {
-            get { return string.Format("{0}|{1}", ListenAddress, ListenPort); }
+            get { return string.Format("{0}:{1}", ListenAddress, ListenPort); }
         }
     }
 }

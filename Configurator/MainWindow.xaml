@@ -19,8 +19,8 @@
         </Menu>
         <Grid DockPanel.Dock="Left" Margin="10" Width="150px">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="25" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="32" />
             </Grid.RowDefinitions>
             <ListBox Grid.Row="0" Name="loadBalancersListBox" ItemsSource="{Binding Path=Config.LoadBalancers}" SelectionChanged="loadBalancersListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
@@ -33,30 +33,36 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Height="32" Margin="5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1">
-                <Button Width="32" Margin="5">+</Button>
-                <Button Width="32" Margin="5">-</Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1">
+                <Button Width="32" Margin="5" Click="NewLoadBalancer_Click">+</Button>
+                <Button Width="32" Margin="5" Click="DeleteLoadBalancer_Click">-</Button>
             </StackPanel>
         </Grid>
         <Grid Margin="10" Name="loadBalancerView">
             <Grid.RowDefinitions>
                 <RowDefinition Height="36" />
-                <RowDefinition />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="36"/>
             </Grid.RowDefinitions>
             <StackPanel VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
-                <TextBlock Text="Listens On: " Padding="5" />
+                <TextBlock Text="Listen Address: " Padding="5" />
                 <TextBox Width="150" Padding="5" Text="{Binding ListenAddress}" />
-                <TextBlock Text=":" Padding="5" />
+                <TextBlock Text="Listen Port: " Padding="5" />
                 <TextBox Width="80" Padding="5" Text="{Binding ListenPort}" />
             </StackPanel>
             <ListView Grid.Row="1" ItemsSource="{Binding Nodes}">
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn Width="64" Header="Priority" DisplayMemberBinding="{Binding Priority}"  />
                         <GridViewColumn Width="140" Header="Target Address" DisplayMemberBinding="{Binding Address}"  />
                         <GridViewColumn Width="140" Header="Target Port" DisplayMemberBinding="{Binding Port}"  />
                     </GridView>
                 </ListView.View>
             </ListView>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Width="32" Margin="5" Click="NewLoadBalancerNode_Click">+</Button>
+                <Button Width="32" Margin="5" Click="DeleteLoadBalancerNode_Click">-</Button>
+            </StackPanel>
         </Grid>
     </DockPanel>
 </Window>
