@@ -28,6 +28,21 @@ namespace Configurator
             }
         }
 
+        private bool _isFileOpen = false;
+        public bool IsFileOpen
+        {
+            get
+            {
+                return _isFileOpen;
+            }
+
+            set
+            {
+                _isFileOpen = value;
+                OnPropertyChanged("IsFileOpen");
+            }
+        }
+
         public LoadBalancerSection LoadBalancerConfig
         {
             get
@@ -49,12 +64,21 @@ namespace Configurator
         {
             if(String.Equals(e.PropertyName, "Config"))
             {
-                if (loadBalancersListBox.ItemsSource == null)
+                if (Config != null)
                 {
-                    loadBalancersListBox.ItemsSource = LoadBalancerConfig.LoadBalancers;
-                }
+                    IsFileOpen = true;
 
-                loadBalancersListBox.Items.Refresh();
+                    if (loadBalancersListBox.ItemsSource == null)
+                    {
+                        loadBalancersListBox.ItemsSource = LoadBalancerConfig.LoadBalancers;
+                    }
+
+                    loadBalancersListBox.Items.Refresh();
+                }
+                else
+                {
+                    IsFileOpen = false;
+                }
             }
         }
 
@@ -63,15 +87,6 @@ namespace Configurator
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public event EventHandler ConfigLoaded;
-        private void OnConfigLoaded()
-        {
-            if(ConfigLoaded != null)
-            {
-                ConfigLoaded(this, new EventArgs());
             }
         }
 
@@ -93,8 +108,6 @@ namespace Configurator
 
             Config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             Config.Sections.Add("loadBalancers", new LoadBalancerSection());
-
-            OnConfigLoaded();
         }
 
         private void FileOpenMenuItem_Click(object sender, RoutedEventArgs e)
@@ -115,24 +128,38 @@ namespace Configurator
                 };
 
                 Config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-
-                OnConfigLoaded();
             }
         }
 
         private void FileSaveMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Config != null)
+            {
+                Config.Save();
+            }
         }
 
         private void FileSaveAsMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            if (Config != null)
+            {
+                SaveFileDialog sfd = new SaveFileDialog()
+                {
+                    Title = "Save Configuration File As...",
+                    DefaultExt = ".config",
+                    Filter = "Configuration Files|*.config|All Files|*.*"
+                };
 
+                if (sfd.ShowDialog() == true)
+                {
+                    Config.SaveAs(sfd.FileName);
+                }
+            }
         }
 
         private void FileExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            Application.Current.Shutdown();
         }
 
         private void LoadBalancersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

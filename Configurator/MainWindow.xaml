@@ -9,10 +9,10 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_New" Click="FileNewMenuItem_Click" />
+                <MenuItem Header="_New..." Click="FileNewMenuItem_Click" />
                 <MenuItem Header="_Open..." Click="FileOpenMenuItem_Click" />
-                <MenuItem Header="_Save" Click="FileSaveMenuItem_Click" IsEnabled="{Binding HasConfigOpen}" />
-                <MenuItem Header="_Save As..." Click="FileSaveAsMenuItem_Click" IsEnabled="{Binding HasConfigOpen}" />
+                <MenuItem Header="_Save" Click="FileSaveMenuItem_Click" IsEnabled="{Binding IsFileOpen}" />
+                <MenuItem Header="_Save As..." Click="FileSaveAsMenuItem_Click" IsEnabled="{Binding IsFileOpen}" />
                 <Separator />
                 <MenuItem Header="_Exit" Click="FileExitMenuItem_Click" />
             </MenuItem>
