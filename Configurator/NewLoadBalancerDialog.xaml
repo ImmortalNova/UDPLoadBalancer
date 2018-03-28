@@ -6,11 +6,15 @@
         xmlns:local="clr-namespace:Configurator"
         mc:Ignorable="d"
         Title="New Load Balancer" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+    </Window.Resources>
     <StackPanel Margin="10">
         <TextBlock Text="Listen Address" Padding="5" />
         <TextBox Name="listenAddressTextBox" Padding="5" />
         <TextBlock Text="Listen Port" Padding="5" />
         <TextBox Name="listenPortTextBox" PreviewTextInput="NumberValidationTextBox" DataObject.Pasting="NumberValidationTextBoxPasting" Padding="5" />
+        <TextBlock Text="Selection Algorithm" Padding="5" />
+        <ComboBox Name="selectionAlgorithm" Padding="5" />
         <StackPanel Orientation="Horizontal" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button Click="OK_Click" Margin="0,0,5,0" Padding="5">OK</Button>
             <Button Click="Cancel_Click" Padding="5">Cancel</Button>

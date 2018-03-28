@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using static UDPLoadBalancer.LoadBalancer;
 
 namespace UDPLoadBalancer.Configuration
 {
@@ -16,6 +17,13 @@ namespace UDPLoadBalancer.Configuration
         {
             get { return (int)base["listenPort"]; }
             set { base["listenPort"] = value; }
+        }
+
+        [ConfigurationProperty("selectionAlgorithm", IsRequired = false)]
+        public ServerSelectionAlgorithm SelectionAlgorithm
+        {
+            get { return (ServerSelectionAlgorithm)base["selectionAlgorithm"]; }
+            set { base["selectionAlgorithm"] = value; }
         }
 
         [ConfigurationProperty("nodes", IsRequired = true)]

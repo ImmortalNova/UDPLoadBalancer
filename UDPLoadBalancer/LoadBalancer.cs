@@ -10,9 +10,9 @@ using System.Threading;
 
 namespace UDPLoadBalancer
 {
-    internal class LoadBalancer
+    public class LoadBalancer
     {
-        internal class Node
+        public class Node
         {
             public enum State
             {
