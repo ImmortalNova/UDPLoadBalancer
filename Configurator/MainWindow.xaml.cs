@@ -135,7 +135,7 @@ namespace Configurator
 
         }
 
-        private void loadBalancersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void LoadBalancersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
             {
@@ -145,9 +145,16 @@ namespace Configurator
 
         private void NewLoadBalancer_Click(object sender, RoutedEventArgs e)
         {
-            LoadBalancerElement newElement = new LoadBalancerElement();
-            LoadBalancerConfig.LoadBalancers.Add(newElement);
-            loadBalancersListBox.Items.Refresh();
+            var dlg = new NewLoadBalancerDialog();
+
+            if (dlg.ShowDialog() == true)
+            {
+                LoadBalancerElement newElement = new LoadBalancerElement();
+                newElement.ListenAddress = dlg.ListenAddress;
+                newElement.ListenPort = dlg.ListenPort;
+                LoadBalancerConfig.LoadBalancers.Add(newElement);
+                loadBalancersListBox.Items.Refresh();
+            }
         }
 
         private void DeleteLoadBalancer_Click(object sender, RoutedEventArgs e)
@@ -156,14 +163,29 @@ namespace Configurator
             if (loadBalancer != null)
             {
                 LoadBalancerConfig.LoadBalancers.Remove(loadBalancer);
-                loadBalancersListBox.ItemsSource = LoadBalancerConfig.LoadBalancers;
                 loadBalancersListBox.Items.Refresh();
             }
         }
 
         private void NewLoadBalancerNode_Click(object sender, RoutedEventArgs e)
         {
+            var context = loadBalancerView.DataContext as LoadBalancerElement;
+            if (context != null)
+            {
+                var dlg = new NewLoadBalancerNodeDialog();
 
+                if (dlg.ShowDialog() == true)
+                {
+                    var el = new LoadBalancerNodeElement();
+                    el.Priority = dlg.Priority;
+                    el.Address = dlg.NodeAddress;
+                    el.Port = dlg.NodePort;
+
+                    context.Nodes.Add(el);
+                    loadBalancerView.DataContext = null;
+                    loadBalancerView.DataContext = context;
+                }
+            }
         }
 
         private void DeleteLoadBalancerNode_Click(object sender, RoutedEventArgs e)

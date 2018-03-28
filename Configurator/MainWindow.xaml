@@ -22,7 +22,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="32" />
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0" Name="loadBalancersListBox" SelectionChanged="loadBalancersListBox_SelectionChanged">
+            <ListBox Grid.Row="0" Name="loadBalancersListBox" SelectionChanged="LoadBalancersListBox_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
