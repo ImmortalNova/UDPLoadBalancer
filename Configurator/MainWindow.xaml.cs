@@ -12,9 +12,9 @@ namespace Configurator
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private LoadBalancerSection _config = null;
+        private Configuration _config = null;
 
-        public LoadBalancerSection Config
+        public Configuration Config
         {
             get
             {
@@ -28,34 +28,34 @@ namespace Configurator
             }
         }
 
-        private bool _hasConfigOpen = false;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public bool HasConfigOpen
+        public LoadBalancerSection LoadBalancerConfig
         {
             get
             {
-                return _hasConfigOpen;
-            }
-
-            set
-            {
-                _hasConfigOpen = value;
-                OnPropertyChanged("HasConfigOpen");   
+                return Config.GetSection("loadBalancers") as LoadBalancerSection;
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            ConfigLoaded += MainWindow_ConfigLoaded;
+            PropertyChanged += MainWindow_PropertyChanged;
         }
 
-        private void MainWindow_ConfigLoaded(object sender, EventArgs e)
+        private void MainWindow_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            //loadBalancersListBox.ItemsSource = Config.LoadBalancers;
+            if(String.Equals(e.PropertyName, "Config"))
+            {
+                if (loadBalancersListBox.ItemsSource == null)
+                {
+                    loadBalancersListBox.ItemsSource = LoadBalancerConfig.LoadBalancers;
+                }
+
+                loadBalancersListBox.Items.Refresh();
+            }
         }
 
         private void OnPropertyChanged(String name)
@@ -77,7 +77,22 @@ namespace Configurator
 
         private void FileNewMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Config = new LoadBalancerSection();
+            SaveFileDialog sfd = new SaveFileDialog()
+            {
+                Title = "Create a new Configuration File",
+                DefaultExt = ".config",
+                Filter = "Configuration Files|*.config|All Files|*.*"
+            };
+
+            bool? done = sfd.ShowDialog();
+
+            ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap
+            {
+                ExeConfigFilename = sfd.FileName
+            };
+
+            Config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            Config.Sections.Add("loadBalancers", new LoadBalancerSection());
 
             OnConfigLoaded();
         }
@@ -99,8 +114,7 @@ namespace Configurator
                     ExeConfigFilename = d.FileName
                 };
 
-                Configuration loadedConfig = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
-                Config = loadedConfig.GetSection("loadBalancers") as LoadBalancerSection;
+                Config = ConfigurationManager.OpenMappedExeConfiguration(configMap, ConfigurationUserLevel.None);
 
                 OnConfigLoaded();
             }
@@ -123,21 +137,28 @@ namespace Configurator
 
         private void loadBalancersListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            loadBalancerView.DataContext = e.AddedItems[0];
+            if (e.AddedItems.Count > 0)
+            {
+                loadBalancerView.DataContext = e.AddedItems[0];
+            }
         }
 
         private void NewLoadBalancer_Click(object sender, RoutedEventArgs e)
         {
             LoadBalancerElement newElement = new LoadBalancerElement();
-            newElement.ListenAddress = "localhost";
-            newElement.ListenPort = 1337;
-            Config.LoadBalancers.Add(newElement);
-            OnPropertyChanged("Config");
+            LoadBalancerConfig.LoadBalancers.Add(newElement);
+            loadBalancersListBox.Items.Refresh();
         }
 
         private void DeleteLoadBalancer_Click(object sender, RoutedEventArgs e)
         {
-
+            var loadBalancer = loadBalancersListBox.SelectedItem as LoadBalancerElement;
+            if (loadBalancer != null)
+            {
+                LoadBalancerConfig.LoadBalancers.Remove(loadBalancer);
+                loadBalancersListBox.ItemsSource = LoadBalancerConfig.LoadBalancers;
+                loadBalancersListBox.Items.Refresh();
+            }
         }
 
         private void NewLoadBalancerNode_Click(object sender, RoutedEventArgs e)
