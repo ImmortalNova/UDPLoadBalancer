@@ -6,8 +6,6 @@
         xmlns:local="clr-namespace:Configurator"
         mc:Ignorable="d"
         Title="New Load Balancer" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-    </Window.Resources>
     <StackPanel Margin="10">
         <TextBlock Text="Listen Address" Padding="5" />
         <TextBox Name="listenAddressTextBox" Padding="5" />

@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Linq;
 using System.Windows;
 using UDPLoadBalancer.Configuration;
 
@@ -56,6 +57,8 @@ namespace Configurator
         public MainWindow()
         {
             InitializeComponent();
+
+            loadBalancerSelectionAlgorithmComboBox.ItemsSource = Enum.GetValues(typeof(UDPLoadBalancer.LoadBalancer.ServerSelectionAlgorithm)).Cast<UDPLoadBalancer.LoadBalancer.ServerSelectionAlgorithm>();
 
             PropertyChanged += MainWindow_PropertyChanged;
         }

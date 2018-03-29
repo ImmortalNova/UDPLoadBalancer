@@ -47,8 +47,10 @@
             <StackPanel VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
                 <TextBlock Text="Listen Address: " Padding="5" />
                 <TextBox Width="150" Padding="5" Text="{Binding ListenAddress}" />
-                <TextBlock Text="Listen Port: " Padding="5" />
+                <TextBlock Text=":" Padding="5" />
                 <TextBox Width="80" Padding="5" Text="{Binding ListenPort}" />
+                <TextBlock Text="Selection Algorithm: " Padding="5" />
+                <ComboBox Name="loadBalancerSelectionAlgorithmComboBox" Padding="5" SelectedItem="{Binding SelectionAlgorithm}" Width="130"/>
             </StackPanel>
             <ListView Grid.Row="1" Name="loadBalancerNodesListView" ItemsSource="{Binding Nodes}">
                 <ListView.View>
