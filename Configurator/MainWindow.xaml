@@ -50,7 +50,7 @@
                 <TextBlock Text="Listen Port: " Padding="5" />
                 <TextBox Width="80" Padding="5" Text="{Binding ListenPort}" />
             </StackPanel>
-            <ListView Grid.Row="1" ItemsSource="{Binding Nodes}">
+            <ListView Grid.Row="1" Name="loadBalancerNodesListView" ItemsSource="{Binding Nodes}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="64" Header="Priority" DisplayMemberBinding="{Binding Priority}"  />

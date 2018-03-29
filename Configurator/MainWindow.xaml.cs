@@ -186,8 +186,7 @@ namespace Configurator
 
         private void DeleteLoadBalancer_Click(object sender, RoutedEventArgs e)
         {
-            var loadBalancer = loadBalancersListBox.SelectedItem as LoadBalancerElement;
-            if (loadBalancer != null)
+            if (loadBalancersListBox.SelectedItem is LoadBalancerElement loadBalancer)
             {
                 LoadBalancerConfig.LoadBalancers.Remove(loadBalancer);
                 loadBalancersListBox.Items.Refresh();
@@ -196,28 +195,35 @@ namespace Configurator
 
         private void NewLoadBalancerNode_Click(object sender, RoutedEventArgs e)
         {
-            var context = loadBalancerView.DataContext as LoadBalancerElement;
-            if (context != null)
+            if (loadBalancerView.DataContext is LoadBalancerElement context)
             {
                 var dlg = new NewLoadBalancerNodeDialog();
 
                 if (dlg.ShowDialog() == true)
                 {
-                    var el = new LoadBalancerNodeElement();
-                    el.Priority = dlg.Priority;
-                    el.Address = dlg.NodeAddress;
-                    el.Port = dlg.NodePort;
+                    var el = new LoadBalancerNodeElement
+                    {
+                        Priority = dlg.Priority,
+                        Address = dlg.NodeAddress,
+                        Port = dlg.NodePort
+                    };
 
                     context.Nodes.Add(el);
-                    loadBalancerView.DataContext = null;
-                    loadBalancerView.DataContext = context;
+                    loadBalancerNodesListView.Items.Refresh();
                 }
             }
         }
 
         private void DeleteLoadBalancerNode_Click(object sender, RoutedEventArgs e)
         {
-
+            if (loadBalancerView.DataContext is LoadBalancerElement context)
+            {
+                if (loadBalancerNodesListView.SelectedItem is LoadBalancerNodeElement node)
+                {
+                    context.Nodes.Remove(node);
+                    loadBalancerNodesListView.Items.Refresh();
+                }
+            }
         }
     }
 }
