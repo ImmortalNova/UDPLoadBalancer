@@ -34,8 +34,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="1">
-                <Button Margin="0 0 2 0" Click="NewLoadBalancer_Click" Style="{DynamicResource PlusMinusButton}">+</Button>
-                <Button Margin="2 0 0 0" Click="DeleteLoadBalancer_Click" Style="{DynamicResource PlusMinusButton}">-</Button>
+                <Button Margin="0 0 2 0" Click="NewLoadBalancer_Click" Style="{DynamicResource PlusMinusButton}" FontFamily="Segoe MDL2 Assets">&#xE710;</Button>
+                <Button Margin="2 0 0 0" Click="DeleteLoadBalancer_Click" Style="{DynamicResource PlusMinusButton}" FontFamily="Segoe MDL2 Assets">&#xE738;</Button>
             </StackPanel>
         </Grid>
 
@@ -88,8 +88,8 @@
 
             <!-- Load Balancer Node Controls -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Margin="0 0 2 0" Click="NewLoadBalancerNode_Click" Style="{DynamicResource PlusMinusButton}">+</Button>
-                <Button Margin="2 0 0 0" Click="DeleteLoadBalancerNode_Click" Style="{DynamicResource PlusMinusButton}">-</Button>
+                <Button Margin="0 0 2 0" Click="NewLoadBalancerNode_Click" Style="{DynamicResource PlusMinusButton}" FontFamily="Segoe MDL2 Assets">&#xE710;</Button>
+                <Button Margin="2 0 0 0" Click="DeleteLoadBalancerNode_Click" Style="{DynamicResource PlusMinusButton}" FontFamily="Segoe MDL2 Assets">&#xE738;</Button>
             </StackPanel>
         </Grid>
     </DockPanel>
